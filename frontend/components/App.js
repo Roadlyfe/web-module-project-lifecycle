@@ -15,15 +15,16 @@ onTodoNameInputChange = evt => {
   this.setState({ ...this.state, todoNameInput: value })
 }
 
+resetFrom = () => this.setState({ ...this.state, todoNameInput: '' })
+setAxiosresponseError = err => this.setState({ ...this.state, error: err.response.data.message })
+
 postNewTodo = () => {
   axios.post(URL, {name: this.state.todoNameInput})
   .then(res => {
     this.fetchAllTodos()
-    this.setState({ ...this.state, todoNameInput: '' })
+    this.resetFrom()
   })
-  .catch(err => {
-    this.setState ({ ...this.state, error: err.response.data.message })
-  })
+  .catch(this.setAxiosresponseError)
 }
 
 onTodoFormSubmit = evt => {
@@ -36,9 +37,7 @@ fetchAllTodos = () => {
   .then(res => {
     this.setState({ ...this.state, todos: res.data.data })
   })
-  .catch(err => {
-    this.setState ({ ...this.state, error: err.response.data.message })
-  })
+  .catch(this.setAxiosresponseError)
 }
 
 componentDidMount() {
